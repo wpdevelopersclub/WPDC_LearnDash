@@ -1,0 +1,35 @@
+{
+    "name" 			: "wpdevelopersclub/wpdevsclub-learndash",
+    "description" 	: "WP Developers Club LearnDash Plugin",
+    "type"          : "project",
+    "keywords" 		: ["wordpress", "theme", "wp", "plugin"],
+    "homepage" 		: "http://wpdevelopersclub.com",
+    "license" 		: "GPL-2.0+",
+    "authors": [
+        {
+            "name" 	: "Tonya",
+            "email" : "hello@wpdevelopersclub.com"
+        }
+    ],
+    "require": {
+        "php" : ">=5.4.0"
+    },
+    "autoload" : {
+        "classmap" : [
+            "class-plugin.php",
+
+            "lib/models/class-course.php",
+            "lib/templates/class-single.php"
+        ],
+        "files": []
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "config": {
+        "vendor-dir": "assets/vendor"
+    },
+    "minimum-stability": "dev"
+}
