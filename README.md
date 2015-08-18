@@ -1,6 +1,6 @@
-#Podcast Plugin for WordPress Developers' Club website
+#LearnDash & Courses Plugin for WPDC
 
-Brings the podcast to the Club.
+This plugin handles the customization of LearnDash for the courses, lessons, topics, and quiz pages.
 	 	
 __Contributors:__ [Tonya](https://github.com/hellofromtonya)  
 __Requires:__ WordPress 3.5  
@@ -13,16 +13,3 @@ It does requires:
 
 * the Genesis framework.
 * [Core Plugin](https://github.com/wpdevelopersclub/WPDC_Core) 
-
-### Features
-This plugin is fully OOP and utilizes Polymorphism, Inheritance, etc.  It shows you how to build OOP-capable plugins.
-
-It uses:
-* Composer and its autoload functionality in place of filling a function with includes and requires.
-* Gulp as it's task runner
- 
-This plugin includes everything needed for the Podcast, including the template manager, templates, and single-pocast files. 
-
-Includes:
- Meta boxes     
- Custom Post Types 
