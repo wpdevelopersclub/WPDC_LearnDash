@@ -1,7 +1,7 @@
 <?php
 
 $type = 'topic';
-$post_type = 'sfwd-topics';
+$post_type = 'sfwd-topic';
 $header_ths = array(
 	__( 'Program', 'wpdc' ),
 	__( 'Course', 'wpdc' ),

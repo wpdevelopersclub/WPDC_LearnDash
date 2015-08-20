@@ -8,7 +8,7 @@ return array(
 	'remove_post_type_support'      => array(
 		'sfwd-courses'              => $remove_post_type_support,
 		'sfwd-lessons'              => $remove_post_type_support,
-		'sfwd-topics'               => $remove_post_type_support,
+		'sfwd-topic'                => $remove_post_type_support,
 		'sfwd-quiz'                 => $remove_post_type_support,
 	),
 
@@ -21,7 +21,7 @@ return array(
 
 	'template_manager'              => array(
 		'template_folder_path'      => WPDC_LEARNDASH_PLUGIN_DIR . 'lib/templates/',
-		'post_type'                 => array( 'sfwd-courses', 'sfwd-lessons', 'sfwd-quiz' ),
+		'post_type'                 => array( 'sfwd-courses', 'sfwd-lessons', 'sfwd-quiz', 'sfwd-topic' ),
 		'use_template_slug'         => true,
 		'use_single'                => true,
 	),

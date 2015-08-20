@@ -158,8 +158,4 @@ class Single extends Base_Template {
 			'menu_class'     => $class,
 		) );
 	}
-
-	protected function get_header_ths() {
-
-	}
 }
