@@ -1,7 +1,7 @@
 <?php namespace WPDC_Learndash\Templates;
 
 /**
- * Single Course
+ * Single Topic
  *
  * @package     WPDC_Learndash\Templates
  * @since       1.0.0
@@ -11,7 +11,12 @@
  * @copyright   2015 WP Developers Club
  */
 
-$config = include( WPDC_LEARNDASH_PLUGIN_DIR . 'config/templates/single-sfwd-courses.php' );
-new Single( $config );
+use WPDevsClub_Core\Core;
+use WPDC_Learndash\Templates_Classes\Single;
+use WPDevsClub_Core\Config\Factory;
+
+$core = Core::getCore();
+
+new Single( Factory::create( WPDC_LEARNDASH_PLUGIN_DIR . 'config/templates/single-sfwd-topic.php', $core['core_service_providers_dir'] . 'single.php' ), $core );
 
 genesis();

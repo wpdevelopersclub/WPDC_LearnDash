@@ -11,9 +11,9 @@
  * @copyright   2015 WP Developers Club
  */
 
-use WPDevsClub_Core\Models\Base;
+use WPDevsClub_Core\Models\Model;
 
-class Course extends Base {
+class Course extends Model {
 
 	/**
 	 * Program Code
@@ -67,10 +67,7 @@ class Course extends Base {
 	protected function init() {
 		parent::init();
 
-		$cat = get_the_category();
-		if ( ! empty( $cat ) ) {
-			$this->program_code = $cat[0]->cat_name;
-		}
+		$this->init_program_code();
 
 		$this->init_program( $this->fetch_program_from_db() );
 	}
@@ -101,7 +98,6 @@ class Course extends Base {
 	 * @return string|integer
 	 */
 	public function get_course_info( $property, $type = '' ) {
-
 		return 'id' == $type
 			? $this->get_id_for_learndash_meta( $property . '_id', $property )
 			: $this->get_name_for_specific_meta( $property . '_id' );
@@ -166,6 +162,7 @@ class Course extends Base {
 		);
 
 		$results = $wpdb->get_results( $sql_query );
+
 		return is_array( $results ) && ! empty( $results ) ? $results[0] : false;
 	}
 
@@ -182,5 +179,46 @@ class Course extends Base {
 			$this->program_name = stripslashes( $program->post_title );
 			$this->program_id   = (int) $program->ID;
 		}
+	}
+
+	/**
+	 * Initialize the program code
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return null
+	 */
+	protected function init_program_code() {
+		$this->program_code = $this->config->fetch_program_code_from_course
+			? $this->fetch_program_code_from_assigned_course()
+			: $this->fetch_program_code_from_category( $this->post_id );
+	}
+
+	/**
+	 * Fetch the program code from the assigned category
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $post_id
+	 * @return string|null
+	 */
+	protected function fetch_program_code_from_category( $post_id ) {
+		$category = get_the_category( $post_id );
+		if ( ! empty( $category ) ) {
+			return $category[0]->cat_name;
+		}
+	}
+
+	/**
+	 * Fetch the program code from the assigned course
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string|null
+	 */
+	protected function fetch_program_code_from_assigned_course() {
+		global $post;
+		$course_id = learndash_get_setting( $post, 'course' );
+		return $this->fetch_program_code_from_category( $course_id );
 	}
 }

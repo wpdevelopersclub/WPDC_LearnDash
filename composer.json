@@ -18,8 +18,10 @@
         "classmap" : [
             "class-plugin.php",
 
-            "lib/models/class-course.php",
-            "lib/templates/class-single.php"
+            "src/customizers/class-html.php",
+
+            "src/models/class-course.php",
+            "src/template-classes/class-single.php"
         ],
         "files": []
     },

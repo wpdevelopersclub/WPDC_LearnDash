@@ -13,7 +13,7 @@
  * Plugin Name:     Custom LearnDash extension for WPDC
  * Plugin URI:      http://wpdevelopersclub.com/
  * Description:     Configuring LearnDash for our needs
- * Version:         1.0.0
+ * Version:         1.1.0
  * Author:          WP Developers Club and Tonya
  * Author URI:      http://wpdevelopersclub.com
  * Text Domain:     wpdevsclub
@@ -36,6 +36,8 @@
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
+
+use WPDevsClub_Core\Config\Factory;
 
 // Oh no you don't. Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -74,12 +76,15 @@ function init_hooks() {
 /**
  * Launch the plugin
  *
- * @since 1.0.0
+ * @since 1.1.0
  *
  * @return null
  */
 function launch() {
-	$config = wpdevsclub_load_config( 'plugin.php', WPDC_LEARNDASH_PLUGIN_DIR . '/config/' );
-
-	new Plugin( $config );
+	new Plugin( Factory::create( WPDC_LEARNDASH_PLUGIN_DIR . 'config/plugin.php' ) );
 }
+
+add_action( 'wpdevsclub_do_service_providers', function( $core ) {
+	$core['wpdc_learndash.dir'] = WPDC_LEARNDASH_PLUGIN_DIR;
+	$core['wpdc_learndash.url'] = WPDC_LEARNDASH_PLUGIN_URL;
+} );

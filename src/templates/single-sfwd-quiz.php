@@ -11,7 +11,12 @@
  * @copyright   2015 WP Developers Club
  */
 
-$config = include( WPDC_LEARNDASH_PLUGIN_DIR . 'config/templates/single-sfwd-quiz.php' );
-new Single( $config );
+use WPDevsClub_Core\Core;
+use WPDC_Learndash\Templates_Classes\Single;
+use WPDevsClub_Core\Config\Factory;
+
+$core = Core::getCore();
+
+new Single( Factory::create( WPDC_LEARNDASH_PLUGIN_DIR . 'config/templates/single-sfwd-quiz.php', $core['core_service_providers_dir'] . 'single.php' ), $core );
 
 genesis();

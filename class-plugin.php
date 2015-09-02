@@ -6,7 +6,7 @@
  * @package     WPDC_Learndash
  * @since       1.0.0
  * @author      WPDevelopersClub and hellofromTonya
- * @link        http://wpdevelopersclub.com/
+ * @link        https://wpdevelopersclub.com/
  * @license     GNU General Public License 2.0+
  * @copyright   2015 WP Developers Club
  */
@@ -16,10 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Cheatin&#8217; uh?' );
 }
 
-use WPDevsClub_Core\Admin\Metabox\Metabox;
-use WPDevsClub_Core\Support\Template_Manager;
+use WPDevsClub_Core\Addons\Addon;
 
-final class Plugin {
+final class Plugin extends Addon {
 
 	/**
 	 * The plugin's version
@@ -35,86 +34,24 @@ final class Plugin {
 	 */
 	const MIN_WP_VERSION = '3.5';
 
-	/**
-	 * Configuration parameters
-	 *
-	 * @var array
-	 */
-	protected $config = array();
-
 	/*************************
-	 * Getters
+	 * Instantiate & Init
 	 ************************/
 
-	public function version() {
-		return self::VERSION;
-	}
-
-	public function min_wp_version() {
-		return self::MIN_WP_VERSION;
-	}
-
-	/**************************
-	 * Instantiate & Initialize
-	 *************************/
-
 	/**
-	 * Instantiate the plugin
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array     $config
-	 * @return self
-	 */
-    public function __construct( array $config ) {
-	    $this->config = $config;
-
-	    $this->init_hooks();
-    }
-
-	/**
-	 * Initialize hooks
+	 * Addons can overload this method for additional events
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return null
 	 */
-    protected function init_hooks() {
+	protected function init_addon_events() {
+		add_action( 'genesis_setup', array( $this, 'setup' ), 50 );
+	}
 
-	    add_action( 'wpdevsclub_admin_init',            array( $this, 'init_admin' ) );
-    	add_action( 'wpdevsclub_init_object_factory',   array( $this, 'init_object_factory' ) );
-	    add_action( 'genesis_setup',                    array( $this, 'setup' ), 50 );
-    }
-
-	/**************************
+	/*************************
 	 * Callbacks
-	 *************************/
-
-	/**
-	 * Initialize Admin
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return null
-	 */
-	public function init_admin() {
-		foreach ( $this->config['metaboxes'] as $key => $mb_config ) {
-			new Metabox( $mb_config );
-		}
-	}
-
-	/**
-	 * Instantiate each of the plugin objects
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return null
-	 */
-	public function init_object_factory() {
-		$this->remove_post_type_support();
-
-		new Template_Manager( $this->config['template_manager'] );
-	}
+	 ************************/
 
 	/**
 	 * Runtime setup
@@ -126,26 +63,12 @@ final class Plugin {
 	public function setup() {
 		$this->register_sidebars();
 		$this->register_menus();
+		$this->remove_post_type_support();
 	}
 
-	/**************************
-	 * Helpers Functionality
-	 *************************/
-
-	/**
-	 * Remove the post type support
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return null
-	 */
-	protected function remove_post_type_support() {
-		foreach ( $this->config['remove_post_type_support'] as $post_type => $supports ) {
-			foreach ( $supports as $support ) {
-				remove_post_type_support( $post_type, $support );
-			}
-		}
-	}
+	/*************************
+	 * Helpers
+	 ************************/
 
 	/**
 	 * Register Sidebars
@@ -155,14 +78,13 @@ final class Plugin {
 	 * @return null
 	 */
 	protected function register_sidebars() {
-
-		foreach ( $this->config['sidebars'] as $id => $sidebar ) {
+		array_walk ( $this->config->sidebars, function( $sidebar, $id ) {
 			genesis_register_sidebar( array(
 				'id'            => $id,
 				'name'          => $sidebar['name'],
 				'description'   => $sidebar['description'],
-			));
-		}
+			) );
+		} );
 	}
 
 	/**
@@ -176,5 +98,19 @@ final class Plugin {
 	protected function register_menus() {
 		global $_wp_theme_features;
 		$_wp_theme_features['genesis-menus'][0] = array_merge( $this->config['genesis-menus'], $_wp_theme_features['genesis-menus'][0] );
+	}
+	/**
+	 * Remove the post type support
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return null
+	 */
+	protected function remove_post_type_support() {
+		array_walk( $this->config->remove_post_type_support, function( $supports, $post_type ) {
+			foreach ( $supports as $support ) {
+				remove_post_type_support( $post_type, $support );
+			}
+		} );
 	}
 }

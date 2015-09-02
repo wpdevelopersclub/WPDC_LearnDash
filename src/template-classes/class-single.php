@@ -1,36 +1,24 @@
-<?php namespace WPDC_Learndash\Templates;
+<?php namespace WPDC_Learndash\Templates_Classes;
 
 /**
- * Single Course, Lesson, or Quiz
+ * Single Course
  *
- * @package     WPDC_Learndash\Templates
+ * @package     WPDC_Learndash\Templates_Classes
  * @since       1.0.0
  * @author      WPDevelopersClub and hellofromTonya
- * @link        http://wpdevelopersclub.com/
+ * @link        https://wpdevelopersclub.com/
  * @license     GNU General Public License 2.0+
  * @copyright   2015 WP Developers Club
  */
 
-use WPDevsClub_Core\Support\Base_Template;
-use WPDC_Learndash\Models\Course as Model;
-use WPDevsClub_Core\Structures\Post\Post;
+use WPDevsClub_Core\Support\Template;
 
-class Single extends Base_Template {
+class Single extends Template {
+
 
 	/**************************
 	 * Instantiate & Initialize
 	 *************************/
-
-	/**
-	 * Initialize Properties
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return null
-	 */
-	protected function init_properties() {
-		$this->body_classes = $this->config['body_classes'];
-	}
 
 	/**
 	 * Initialize
@@ -40,19 +28,17 @@ class Single extends Base_Template {
 	 * @return null
 	 */
 	protected function init() {
-		$this->init_object_factory();
-		$this->init_page_hooks();
+		$this->setup_sticky_footer();
 	}
 
 	/**
-	 * Initialize Page Hooks
+	 * Initialize child events
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return null
 	 */
-	protected function init_page_hooks() {
-
+	protected function init_child_events() {
 		add_action( 'genesis_after_header',         array( $this, 'render_subnav' ), 11 );
 
 		remove_all_actions( 'genesis_entry_header' );
@@ -69,20 +55,9 @@ class Single extends Base_Template {
 		add_action( 'genesis_after_content',        array( $this, 'do_sticky_footer' ), 99 );
 	}
 
-	/**
-	 * Initialize Object Factory
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return null
-	 */
-	protected function init_object_factory() {
-		$this->model = new Model( $this->config['model'], $this->post_id );
-
-		new Post( $this->model, $this->config['post'], $this->post_id );
-
-		do_action( 'wpdevclub_setup_sticky_footer', $this->config['sticky_footer']['setup'] );
-	}
+	/*****************
+	 * Callbacks
+	 ****************/
 
 	/**
 	 * Render the Page Header
@@ -92,7 +67,9 @@ class Single extends Base_Template {
 	 * @return null
 	 */
 	public function render_page_header() {
-		include( $this->config['post_header']['view'] );
+		if ( is_readable( $this->core['config']['post_header']['view'] ) ) {
+			include( $this->core['config']['post_header']['view'] );
+		}
 	}
 
 	/**
@@ -103,7 +80,9 @@ class Single extends Base_Template {
 	 * @return null
 	 */
 	public function do_sidebar() {
-		include( $this->config['sidebar']['view'] );
+		if ( is_readable( $this->core['config']->sidebar['view'] ) ) {
+			include( $this->core['config']->sidebar['view'] );
+		}
 	}
 
 	/**
@@ -116,27 +95,12 @@ class Single extends Base_Template {
 	 * @return array Amended attributes.
 	 */
 	public function sidebar_attributes( $attributes ) {
-
 		$attributes['class']     = 'sidebar sidebar-courses widget-area';
 		$attributes['role']      = 'complementary';
 		$attributes['itemscope'] = 'itemscope';
 		$attributes['itemtype']  = 'http://schema.org/WPSideBar';
 
 		return $attributes;
-
-	}
-
-	/**
-	 * Time to do the sticky footer
-	 *
-	 * @since 1.0.0
-	 *
-	 * @uses action event 'wpdevsclub_do_sticky_footer'
-	 *
-	 * @return null
-	 */
-	public function do_sticky_footer() {
-		do_action( 'wpdevsclub_do_sticky_footer', $this->model, $this->config['sticky_footer']['render'], $this->post_id );
 	}
 
 	/**
@@ -147,7 +111,6 @@ class Single extends Base_Template {
 	 * @return null
 	 */
 	public function render_subnav() {
-
 		$class = 'menu genesis-nav-menu menu-course';
 		if ( genesis_superfish_enabled() ) {
 			$class .= ' js-superfish';
@@ -157,5 +120,16 @@ class Single extends Base_Template {
 			'theme_location' => 'course',
 			'menu_class'     => $class,
 		) );
+	}
+
+	/**
+	 * Register the stick footer
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return null
+	 */
+	public function setup_sticky_footer() {
+		do_action( 'wpdevclub_setup_sticky_footer', $this->core['sticky_footer.setup_config'] );
 	}
 }

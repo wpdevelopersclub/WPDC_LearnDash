@@ -19,7 +19,7 @@ genesis_markup( array(
 ) );
 
 do_action( 'genesis_before_sidebar_widget_area' );
-dynamic_sidebar( $this->config['sidebar']['name'] );
+dynamic_sidebar( $this->core['config']['sidebar']['name'] );
 do_action( 'genesis_after_sidebar_widget_area' );
 
 genesis_markup( array(

@@ -6,7 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname($vendorDir));
 
 return array(
-    'WPDC_Learndash\\Models\\Course' => $baseDir . '/lib/models/class-course.php',
+    'WPDC_Learndash\\Customizers\\HTML' => $baseDir . '/src/customizers/class-html.php',
+    'WPDC_Learndash\\Models\\Course' => $baseDir . '/src/models/class-course.php',
     'WPDC_Learndash\\Plugin' => $baseDir . '/class-plugin.php',
-    'WPDC_Learndash\\Templates\\Single' => $baseDir . '/lib/templates/class-single.php',
+    'WPDC_Learndash\\Templates_Classes\\Single' => $baseDir . '/src/template-classes/class-single.php',
 );
