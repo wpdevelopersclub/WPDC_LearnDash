@@ -13,6 +13,8 @@
 
 use WPDevsClub_Core\Config\Arr_Config;
 use WPDevsClub_Core\Admin\Metabox\Metabox;
+use WPDC_Learndash\Admin\Metabox\Program_Id;
+use WPDevsClub_Core\Custom\Custom_Post_Type;
 use WPDevsClub_Core\Support\Template_Manager;
 
 return array(
@@ -25,13 +27,12 @@ return array(
 	 *    $unique_id => $value
 	 ********************************************************/
 
-	'initial_parameters'            => array(
+	'initial_parameters'       => array(
 		'wpdc_learndash.dir'        => WPDC_LEARNDASH_PLUGIN_DIR,
 		'wpdc_learndash.url'        => WPDC_LEARNDASH_PLUGIN_URL,
 		'wpdc_learndash.config_dir' => WPDC_LEARNDASH_PLUGIN_DIR . 'config/',
 		'wpdc_learndash.config'     => array(),
 	),
-
 	/*********************************************************
 	 * Back-End Service Providers -
 	 * These service providers are loaded when 'admin_init' fires.
@@ -45,20 +46,30 @@ return array(
 	 *      'concrete' => Closure,
 	 ********************************************************/
 
-	'be_service_providers'      => array(
-		'wpdc_learndash.metabox.program' => array(
-			'autoload'          => true,
-			'concrete'          => function( $container ) {
+	'be_service_providers'     => array(
+		'wpdc_learndash.metabox.program_code' => array(
+			'autoload' => true,
+			'concrete' => function ( $container ) {
 				return new Metabox(
 					new Arr_Config(
-						$container['wpdc_learndash.config_dir'] . 'metaboxes/program.php',
+						$container['wpdc_learndash.config_dir'] . 'metaboxes/program-code.php',
+						$container['core_config_defaults_dir'] . 'metabox.php'
+					)
+				);
+			},
+		),
+		'wpdc_learndash.metabox.program_id'   => array(
+			'autoload' => true,
+			'concrete' => function ( $container ) {
+				return new Program_Id(
+					new Arr_Config(
+						$container['wpdc_learndash.config_dir'] . 'metaboxes/program-id.php',
 						$container['core_config_defaults_dir'] . 'metabox.php'
 					)
 				);
 			},
 		),
 	),
-
 	/*********************************************************
 	 * Front-End Service Providers -
 	 * These service providers are loaded when 'genesis_init'
@@ -73,8 +84,7 @@ return array(
 	 *      'concrete' => Closure,
 	 ********************************************************/
 
-	'fe_service_providers'  => array(),
-
+	'fe_service_providers'     => array(),
 	/*********************************************************
 	 * Front-End Service Providers -
 	 * These service providers are loaded when 'genesis_init' fires.
@@ -88,10 +98,10 @@ return array(
 	 *      'concrete' => Closure,
 	 ********************************************************/
 
-	'both_service_providers'    => array(
+	'both_service_providers'   => array(
 		'wpdc_learndash.template_manager' => array(
-			'autoload'          => true,
-			'concrete'          => function( $container ) {
+			'autoload' => true,
+			'concrete' => function ( $container ) {
 				return new Template_Manager(
 					new Arr_Config(
 						$container['wpdc_learndash.config_dir'] . 'template-manager.php',
@@ -100,28 +110,35 @@ return array(
 				);
 			},
 		),
+		'cpt.wpdc_programs'     => array(
+			'autoload' => true,
+			'concrete' => function ( $container ) {
+				return new Custom_Post_Type(
+					new Arr_Config( $container['wpdc_learndash.config_dir'] . 'cpts/program.php' ),
+					'wpdc_program'
+				);
+			},
+		),
 	),
-
 	/*********************************************************
 	 * Extras
 	 ********************************************************/
 
-	'genesis-menus'                         => array(
-		'course'                            => __( 'Course', 'wpdc' ),
-		'sticky_footer_course_quick_links'  => __( 'Sticky Footer - Course Quick Links', 'wpdc' ),
-		'sticky_footer_course_extras'       => __( 'Sticky Footer - Course Extras', 'wpdc' ),
+	'genesis-menus'            => array(
+		'course'                           => __( 'Course', 'wpdc' ),
+		'sticky_footer_course_quick_links' => __( 'Sticky Footer - Course Quick Links', 'wpdc' ),
+		'sticky_footer_course_extras'      => __( 'Sticky Footer - Course Extras', 'wpdc' ),
 	),
-	'remove_post_type_support'      => array(
-		'sfwd-courses'              => array( 'comments', 'trackbacks' ),
-		'sfwd-lessons'              => array( 'comments', 'trackbacks' ),
-		'sfwd-topic'                => array( 'comments', 'trackbacks' ),
-		'sfwd-quiz'                 => array( 'comments', 'trackbacks' ),
+	'remove_post_type_support' => array(
+		'sfwd-courses' => array( 'comments', 'trackbacks' ),
+		'sfwd-lessons' => array( 'comments', 'trackbacks' ),
+		'sfwd-topic'   => array( 'comments', 'trackbacks' ),
+		'sfwd-quiz'    => array( 'comments', 'trackbacks' ),
 	),
-
-	'sidebars'                      => array(
-		'courses'                   => array(
-			'name'                  => __( 'Courses', 'wpdc' ),
-			'description'           => __( 'This area is for the course pages.', 'wpdc' ),
+	'sidebars'                 => array(
+		'courses' => array(
+			'name'        => __( 'Courses', 'wpdc' ),
+			'description' => __( 'This area is for the course pages.', 'wpdc' ),
 		),
 	),
 );

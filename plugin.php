@@ -81,10 +81,12 @@ function init_hooks() {
  * @return null
  */
 function launch() {
-	new Plugin( Factory::create( WPDC_LEARNDASH_PLUGIN_DIR . 'config/plugin.php' ) );
+	if ( class_exists( 'SFWD_LMS' ) ) {
+		new Plugin( Factory::create( WPDC_LEARNDASH_PLUGIN_DIR . 'config/plugin.php' ) );
+	}
 }
 
-add_action( 'wpdevsclub_do_service_providers', function( $core ) {
-	$core['wpdc_learndash.dir'] = WPDC_LEARNDASH_PLUGIN_DIR;
-	$core['wpdc_learndash.url'] = WPDC_LEARNDASH_PLUGIN_URL;
-} );
+//add_action( 'wpdevsclub_do_service_providers', function( $core ) {
+//	$core['wpdc_learndash.dir'] = WPDC_LEARNDASH_PLUGIN_DIR;
+//	$core['wpdc_learndash.url'] = WPDC_LEARNDASH_PLUGIN_URL;
+//} );

@@ -18,6 +18,7 @@
         "classmap" : [
             "class-plugin.php",
 
+            "src/admin/metabox/class-program-id.php",
             "src/customizers/class-html.php",
 
             "src/models/class-course.php",

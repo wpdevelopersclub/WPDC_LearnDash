@@ -20,7 +20,7 @@ class Course extends Model {
 	 *
 	 * @var string
 	 */
-	protected $program_code;
+	protected $program_id = 0;
 
 	/**
 	 * Program Name
@@ -28,13 +28,6 @@ class Course extends Model {
 	 * @var string
 	 */
 	protected $program_name;
-
-	/**
-	 * Program ID
-	 *
-	 * @var int
-	 */
-	protected $program_id = 0;
 
 	/**
 	 * Course ID
@@ -67,9 +60,9 @@ class Course extends Model {
 	protected function init() {
 		parent::init();
 
-		$this->init_program_code();
+		$this->init_course_id();
 
-		$this->init_program( $this->fetch_program_from_db() );
+		$this->init_program();
 	}
 
 
@@ -158,7 +151,7 @@ class Course extends Model {
 				FROM {$wpdb->posts} AS p
 				LEFT JOIN {$wpdb->postmeta} AS meta ON meta.post_id = p.ID
 				WHERE meta.meta_key = %s AND meta.meta_value = %s;
-			", $this->config['program_code_meta_key'], $this->program_code
+			", $this->config->program_id_meta_key, $this->program_id
 		);
 
 		$results = $wpdb->get_results( $sql_query );
@@ -167,45 +160,29 @@ class Course extends Model {
 	}
 
 	/**
-	 * Initialize the program properties
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param false|StdObj $program
-	 * @return false
-	 */
-	protected function init_program( $program ) {
-		if ( $program ) {
-			$this->program_name = stripslashes( $program->post_title );
-			$this->program_id   = (int) $program->ID;
-		}
-	}
-
-	/**
-	 * Initialize the program code
+	 * Init the Course ID
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return null
 	 */
-	protected function init_program_code() {
-		$this->program_code = $this->config->fetch_program_code_from_course
-			? $this->fetch_program_code_from_assigned_course()
-			: $this->fetch_program_code_from_category( $this->post_id );
+	protected function init_course_id() {
+		$this->course_id = $this->config->fetch_program_id_from_course
+			? $this->get_id_for_learndash_meta( 'course_id', 'course' )
+			: $this->post_id;
 	}
 
 	/**
-	 * Fetch the program code from the assigned category
+	 * Initialize the program properties
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $post_id
-	 * @return string|null
+	 * @return false
 	 */
-	protected function fetch_program_code_from_category( $post_id ) {
-		$category = get_the_category( $post_id );
-		if ( ! empty( $category ) ) {
-			return $category[0]->cat_name;
+	protected function init_program() {
+		$this->program_id = $this->get_program_id();
+		if ( $this->program_id > 0 ) {
+			$this->program_name = get_the_title( $this->program_id );
 		}
 	}
 
@@ -220,5 +197,20 @@ class Course extends Model {
 		global $post;
 		$course_id = learndash_get_setting( $post, 'course' );
 		return $this->fetch_program_code_from_category( $course_id );
+	}
+
+	/**
+	 * Get Course Program Code
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return int
+	 */
+	protected function get_program_id() {
+		if ( $this->config->fetch_program_id_from_course ) {
+			return (int) get_post_meta( $this->course_id, $this->config->program_id_meta_key, true );
+		}
+
+		return (int) $this->get_property( 'data', $this->config->program_id_meta_key, '', 0 );
 	}
 }
