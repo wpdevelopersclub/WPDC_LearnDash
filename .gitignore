@@ -4,7 +4,7 @@ phpunit.xml
 /bin
 
 # Sass cache
-/.sass-cache
+.sass-cache/
 
 # Development files
 /node_modules
