@@ -1,4 +1,15 @@
-<?php
+<?php namespace WPDC_WPCourseware;
+
+/**
+ * Program Custom Post Type Runtime Configuration
+ *
+ * @package     WPDC_WPCourseware
+ * @since       1.1.0
+ * @author      WPDevelopersClub and hellofromTonya
+ * @link        https://wpdc.dev/
+ * @license     GNU General Public License 2.0+
+ * @copyright   2015 WP Developers Club
+ */
 
 return array(
 	'singular_name'  => 'Program',
@@ -29,7 +40,7 @@ return array(
 		'program_code' => array(
 			'callback' => 'genesis_get_custom_field',
 			'echo'     => true,
-			'args'     => array( 'wpdevsclub_program_code' ),
+			'args'     => array( '_wpdc_program_code' ),
 		),
 		'cat'          => array(
 			'callback' => 'wpdevsclub_get_joined_list_of_terms',

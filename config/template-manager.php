@@ -13,7 +13,7 @@
 
 return array(
 	'template_folder_path'      => WPDC_LEARNDASH_PLUGIN_DIR . 'src/templates/',
-	'post_type'                 => array( 'sfwd-courses', 'sfwd-lessons', 'sfwd-quiz', 'sfwd-topic' ),
+	'post_type'                 => array( 'wpdc_program', 'sfwd-courses', 'sfwd-lessons', 'sfwd-quiz', 'sfwd-topic' ),
 	'use_template_slug'         => true,
 	'use_single'                => true,
 );

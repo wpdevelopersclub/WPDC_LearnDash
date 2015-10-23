@@ -53,6 +53,8 @@ class Single extends Template {
 		add_filter( 'genesis_attr_sidebar-courses', array( $this, 'sidebar_attributes' ) );
 
 		add_action( 'genesis_after_content',        array( $this, 'do_sticky_footer' ), 99 );
+
+		add_filter( 'learndash_next_post_link', array( $this, 'add_styling_class_to_next_link_button' ), 99 );
 	}
 
 	/*****************
@@ -131,5 +133,18 @@ class Single extends Template {
 	 */
 	public function setup_sticky_footer() {
 		do_action( 'wpdevclub_setup_sticky_footer', $this->core['sticky_footer.setup_config'] );
+	}
+
+	/**
+	 * Add styling class to the next link button
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param $link
+	 *
+	 * @return mixed
+	 */
+	public function add_styling_class_to_next_link_button( $link ) {
+		return str_replace( '<a', '<a class="next-button"', $link );
 	}
 }

@@ -1,5 +1,5 @@
 {
-    "name" 			: "wpdevelopersclub/wpdevsclub-learndash",
+    "name" 			: "wpdc/wpdc-learndash",
     "description" 	: "WP Developers Club LearnDash Plugin",
     "type"          : "project",
     "keywords" 		: ["wordpress", "theme", "wp", "plugin"],

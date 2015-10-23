@@ -13,7 +13,7 @@
  * Plugin Name:     Custom LearnDash extension for WPDC
  * Plugin URI:      http://wpdevelopersclub.com/
  * Description:     Configuring LearnDash for our needs
- * Version:         1.1.0
+ * Version:         2.0.0
  * Author:          WP Developers Club and Tonya
  * Author URI:      http://wpdevelopersclub.com
  * Text Domain:     wpdevsclub
@@ -58,21 +58,7 @@ if ( ! defined( 'WPDC_LEARNDASH_PLUGIN_URL' ) ) {
 
 require_once( __DIR__ . '/assets/vendor/autoload.php' );
 
-if ( version_compare( $GLOBALS['wp_version'], Plugin::MIN_WP_VERSION, '>' ) ) {
-	init_hooks();
-}
-
-/**
- * Initialize the plugin hooks
- *
- * @since 1.0.0
- *
- * @return null
- */
-function init_hooks() {
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\\launch', 99 );
-}
-
+add_action( 'plugins_loaded', __NAMESPACE__ . '\\launch' );
 /**
  * Launch the plugin
  *
@@ -81,12 +67,13 @@ function init_hooks() {
  * @return null
  */
 function launch() {
-	if ( class_exists( 'SFWD_LMS' ) ) {
-		new Plugin( Factory::create( WPDC_LEARNDASH_PLUGIN_DIR . 'config/plugin.php' ) );
+	if ( ! class_exists( 'SFWD_LMS' ) ) {
+		return;
+	}
+
+	if ( version_compare( $GLOBALS['wp_version'], Plugin::MIN_WP_VERSION, '>' ) ) {
+		$config = Factory::create( WPDC_LEARNDASH_PLUGIN_DIR . 'config/plugin.php' );
+
+		new Plugin( $config );
 	}
 }
-
-//add_action( 'wpdevsclub_do_service_providers', function( $core ) {
-//	$core['wpdc_learndash.dir'] = WPDC_LEARNDASH_PLUGIN_DIR;
-//	$core['wpdc_learndash.url'] = WPDC_LEARNDASH_PLUGIN_URL;
-//} );
