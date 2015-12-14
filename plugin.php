@@ -13,7 +13,7 @@
  * Plugin Name:     Custom LearnDash extension for WPDC
  * Plugin URI:      http://wpdevelopersclub.com/
  * Description:     Configuring LearnDash for our needs
- * Version:         2.0.0
+ * Version:         2.1.0
  * Author:          WP Developers Club and Tonya
  * Author URI:      http://wpdevelopersclub.com
  * Text Domain:     wpdevsclub

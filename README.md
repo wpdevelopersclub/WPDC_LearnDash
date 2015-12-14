@@ -4,7 +4,7 @@ This plugin handles the customization of LearnDash for the courses, lessons, top
 	 	
 __Contributors:__ [Tonya](https://github.com/hellofromtonya)  
 __Requires:__ WordPress 3.5  
-__Tested up to:__ WordPress 4.3  
+__Tested up to:__ WordPress 4.4
 __License:__ [GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.html) 
 
 ### Requirements

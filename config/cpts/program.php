@@ -6,7 +6,7 @@
  * @package     WPDC_WPCourseware
  * @since       1.1.0
  * @author      WPDevelopersClub and hellofromTonya
- * @link        https://wpdc.dev/
+ * @link        https://wpdevelopersclub.com/
  * @license     GNU General Public License 2.0+
  * @copyright   2015 WP Developers Club
  */

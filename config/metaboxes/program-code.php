@@ -1,4 +1,14 @@
-<?php
+<?php namespace WPDC_Learndash\Admin\Metabox;
+
+/**
+ * Program Code Metabox
+ *
+ * @package     WPDC_Learndash\Admin\Metabox
+ * @since       2.0.0
+ * @author      WPDevelopersClub and hellofromTonya
+ * @link        https://wpdevelopersclub.com/
+ * @license     GNU General Public License 2.0+
+ */
 
 return array(
 	'view'                  => WPDC_LEARNDASH_PLUGIN_DIR . 'src/views/admin/metabox-program-code.php',

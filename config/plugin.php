@@ -47,8 +47,19 @@ return array(
 	 ********************************************************/
 
 	'be_service_providers'     => array(
-		'wpdc_learndash.metabox.program_code' => array(
-			'autoload' => true,
+		'metabox.wpdc_learndash.program' => array(
+			'autoload' => false,
+			'concrete' => function ( $container ) {
+				return new Metabox(
+					new Arr_Config(
+						$container['wpdc_learndash.config_dir'] . 'metaboxes/program.php',
+						$container['core_config_defaults_dir'] . 'metabox.php'
+					)
+				);
+			},
+		),
+		'metabox.wpdc_learndash.program_code' => array(
+			'autoload' => false,
 			'concrete' => function ( $container ) {
 				return new Metabox(
 					new Arr_Config(
@@ -58,8 +69,8 @@ return array(
 				);
 			},
 		),
-		'wpdc_learndash.metabox.program_id'   => array(
-			'autoload' => true,
+		'metabox.wpdc_learndash.program_id'   => array(
+			'autoload' => false,
 			'concrete' => function ( $container ) {
 				return new Program_Id(
 					new Arr_Config(
@@ -140,5 +151,11 @@ return array(
 			'name'        => __( 'Courses', 'wpdc' ),
 			'description' => __( 'This area is for the course pages.', 'wpdc' ),
 		),
+	),
+
+	'metaboxes' => array(
+		'metabox.wpdc_learndash.program',
+		'metabox.wpdc_learndash.program_code',
+		'metabox.wpdc_learndash.program_id',
 	),
 );

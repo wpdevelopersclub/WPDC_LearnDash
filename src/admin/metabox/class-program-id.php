@@ -4,7 +4,7 @@
  * Program ID Metabox
  *
  * @package     WPDC_Learndash\Admin\Metabox
- * @since       1.0.0
+ * @since       2.0.0
  * @author      WPDevelopersClub and hellofromTonya
  * @link        http://wpdevelopersclub.com/
  * @license     GNU General Public License 2.0+
@@ -38,25 +38,27 @@ class Program_Id extends Metabox {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array|bool $query
+	 * @param stdClass|bool $query
 	 * @param int $selected_program_id Selected Program ID
 	 * @param string $html
 	 *
 	 * @return string
 	 */
 	protected function do_program_code_loop( $query, $selected_program_id, $html = '' ) {
-		if ( false === $query ) {
+		if ( ! is_object( $query ) ) {
 			return $html;
 		}
 
-		while ( $query->have_posts() ) : $query->the_post();
-			$program_id = get_the_ID();
-			$html .= sprintf( $this->config->options_html_pattern,
-				$program_id, selected( $program_id, $selected_program_id, false ),
-				get_post_meta( $program_id, $this->config->program_code_meta_key, true )
+		foreach ( $query->posts as $program ) {
+			$course_program_code = get_post_meta( $program->ID, $this->config->program_code_meta_key, true);
+
+			$html .= sprintf($this->config->options_html_pattern,
+				$program->ID,
+				selected( $program->ID, $selected_program_id, false ),
+				$course_program_code
 			);
 
-		endwhile;
+		}
 		wp_reset_postdata();
 
 		return $html;
@@ -72,6 +74,10 @@ class Program_Id extends Metabox {
 	protected function get_program_code_query() {
 		$query = new WP_Query( $this->config->options_query_args );
 
-		return $query->have_posts() ? $query : false;
+		if ( ! is_object( $query ) || ! $query->have_posts() ) {
+			return false;
+		}
+
+		return $query;
 	}
 }
